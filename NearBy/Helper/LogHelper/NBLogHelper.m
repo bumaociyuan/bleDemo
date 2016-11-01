@@ -33,15 +33,24 @@
 
     // DBNAME 是要查找的文件名字，文件全名
 
-    NSString *filePath = [documentDirectory stringByAppendingPathComponent:@""];
+    NSString *component = [NSString stringWithFormat:@"%@.%@", fileName, type];
+    NSString *filePath = [documentDirectory stringByAppendingPathComponent:component];
 
     // 用这个方法来判断当前的文件是否存在，如果不存在，就创建一个文件
-
+    NSLog(@"path: %@", filePath);
     if ( ![fileManager fileExistsAtPath:filePath]) {
-
         [fileManager createFileAtPath:filePath contents:nil attributes:nil];
-        
+
     }
+
+    // 写文件
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    NSFileHandle* fh = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
+    [fh seekToFileOffset:[fh seekToEndOfFile]];
+    [fh writeData:data];
+    [fh synchronizeFile];
+
+
 }
 
 

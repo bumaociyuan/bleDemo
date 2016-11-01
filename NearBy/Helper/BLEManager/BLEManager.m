@@ -7,8 +7,8 @@
 //
 
 #import "BLEManager.h"
-#import "TransferService.h"
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "NBLogHelper.h"
 
 #define kSBOSSPrefix @"SBOSS-"
 
@@ -22,6 +22,10 @@
 
 @property (nonatomic, strong) NSTimer *globalTimer;
 @property (nonatomic) NSInteger currentDeviceCount;
+
+// Test
+@property (nonatomic, strong) NSString *testLogFileName;
+@property (nonatomic, strong) NSTimer *testTimer;
 
 // CBPeripheralManager
 @property (strong, nonatomic) CBPeripheralManager       *peripheralManager;
@@ -75,6 +79,7 @@
     }
 
 
+
 }
 
 - (void)stopScan
@@ -94,6 +99,7 @@
         default:
             break;
     }
+
 }
 
 - (void)cleanDevices
@@ -135,6 +141,7 @@
     self.bleMode = (BLEMode)random;
     self.advertisingName = [self createSBOSSName:nil];
     _discoveredDevices = [[NSMutableArray alloc] init];
+    [self startLogging];
 }
 
 
@@ -161,6 +168,42 @@
         _currentDeviceCount = self.discoveredDevices.count;
     }
 
+}
+
+#pragma mark - Make Log File
+
+- (NSString *)currentDateString
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
+
+    NSString *dateString = [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+    return dateString;
+}
+
+- (void)handleLogEvent
+{
+    NSString *dateString = [self currentDateString];
+    self.testLogFileName = [NSString stringWithFormat:@"%@-%@", self.advertisingName, dateString];
+}
+
+- (void)startLogging
+{
+    [self handleLogEvent];
+    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
+}
+
+- (void)stopLogging
+{
+    [self.testTimer invalidate];
+    self.testTimer = nil;
+}
+
+- (void)logDistance:(CGFloat )distance withName:(NSString *)name
+{
+    NSString *distanceString = [NSString stringWithFormat:@"%.4f", distance];
+    NSString *dataString = [NSString stringWithFormat:@"{\"from\":\"%@\",\"to\":\"%@\",\"length\":\"%@\",\"date\":\"%@\"},", self.advertisingName, name, distanceString, [self currentDateString]];
+    [[NBLogHelper defaultHelper] writeString:dataString toFile:self.testLogFileName type:@"txt"];
 }
 
 #pragma mark - 开始扫描周边设备
@@ -227,9 +270,11 @@
     return YES;
 }
 
+
+
+
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-
     CGFloat distanceFloat = [self distanceWithRSSI:RSSI.integerValue];
 
     if (distanceFloat > 30) {
@@ -250,6 +295,9 @@
         return;
     }
 
+    // Test
+    [self logDistance:distanceFloat withName:name];
+
     BLEDevice *device = [[BLEDevice alloc] init];
     device.name = name;
     device.UUIDString = uuid.UUIDString;
@@ -268,9 +316,6 @@
         for (NSInteger i = 0; i < _discoveredDevices.count; i++) {
             BLEDevice *de = [_discoveredDevices objectAtIndex:i];
             if ([de.UUIDString isEqualToString:device.UUIDString]) {
-                if ([de.name isEqualToString:@"device"]) {
-                    de.name = device.name;
-                }
                 // 记录三秒内的3-5次记录，求平均值
                 BLEDistance *first = de.distanceRecords.firstObject;
                 NSTimeInterval timeBetween = [distance.date timeIntervalSinceDate:first.date];
@@ -294,13 +339,7 @@
         }
     }
 
-
-
     [self.delegate managerDidFindDevices:_discoveredDevices];
-
-    //[self.delegate managerDidFindDevice:device];
-
-
 
 }
 
