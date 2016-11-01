@@ -27,7 +27,7 @@
 		81B40B551DC6F9C30081E475 /* CenterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B40B541DC6F9C30081E475 /* CenterManager.m */; };
 		81B40B581DC6F9F20081E475 /* PeripheralManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B40B571DC6F9F20081E475 /* PeripheralManager.m */; };
 		81B40B5C1DC714AD0081E475 /* BLEDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B40B5B1DC714AD0081E475 /* BLEDevice.m */; };
-		81B40B611DC837BC0081E475 /* AVOSCloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81B40B601DC837BC0081E475 /* AVOSCloud.framework */; };
+		81B40B651DC83A430081E475 /* NBLogHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B40B641DC83A430081E475 /* NBLogHelper.m */; };
 		B92B559015E4621C0036A8A2 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B92B558F15E4621C0036A8A2 /* CoreBluetooth.framework */; };
 		B9F9161A15D5806400B3B398 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161915D5806400B3B398 /* UIKit.framework */; };
 		B9F9161C15D5806400B3B398 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161B15D5806400B3B398 /* Foundation.framework */; };
@@ -67,7 +67,8 @@
 		81B40B591DC6FA7D0081E475 /* TransferService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransferService.h; path = BLEManager/TransferService.h; sourceTree = "<group>"; };
 		81B40B5A1DC714AD0081E475 /* BLEDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLEDevice.h; path = BLEManager/BLEDevice.h; sourceTree = "<group>"; };
 		81B40B5B1DC714AD0081E475 /* BLEDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLEDevice.m; path = BLEManager/BLEDevice.m; sourceTree = "<group>"; };
-		81B40B601DC837BC0081E475 /* AVOSCloud.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AVOSCloud.framework; sourceTree = "<group>"; };
+		81B40B631DC83A430081E475 /* NBLogHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBLogHelper.h; path = LogHelper/NBLogHelper.h; sourceTree = "<group>"; };
+		81B40B641DC83A430081E475 /* NBLogHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBLogHelper.m; path = LogHelper/NBLogHelper.m; sourceTree = "<group>"; };
 		B92B558F15E4621C0036A8A2 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		B9F9161515D5806400B3B398 /* NearBy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearBy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F9161915D5806400B3B398 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -84,7 +85,6 @@
 				B9F9161A15D5806400B3B398 /* UIKit.framework in Frameworks */,
 				B9F9161C15D5806400B3B398 /* Foundation.framework in Frameworks */,
 				B9F9161E15D5806400B3B398 /* CoreGraphics.framework in Frameworks */,
-				81B40B611DC837BC0081E475 /* AVOSCloud.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +196,7 @@
 		81B40B4A1DC6F28F0081E475 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				81B40B621DC839CD0081E475 /* LogHelper */,
 				81B40B4F1DC6F5370081E475 /* BLEManager */,
 				81B40B4B1DC6F28F0081E475 /* ViewTools */,
 			);
@@ -230,9 +231,17 @@
 		81B40B5F1DC837BC0081E475 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				81B40B601DC837BC0081E475 /* AVOSCloud.framework */,
 			);
 			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		81B40B621DC839CD0081E475 /* LogHelper */ = {
+			isa = PBXGroup;
+			children = (
+				81B40B631DC83A430081E475 /* NBLogHelper.h */,
+				81B40B641DC83A430081E475 /* NBLogHelper.m */,
+			);
+			name = LogHelper;
 			sourceTree = "<group>";
 		};
 		B9F9160A15D5806400B3B398 = {
@@ -351,6 +360,7 @@
 				81B40B551DC6F9C30081E475 /* CenterManager.m in Sources */,
 				81B40B521DC6F5720081E475 /* BLEManager.m in Sources */,
 				815FC59C1DC6E66C000239C7 /* main.m in Sources */,
+				81B40B651DC83A430081E475 /* NBLogHelper.m in Sources */,
 				815FC59B1DC6E66C000239C7 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

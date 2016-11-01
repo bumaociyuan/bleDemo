@@ -233,15 +233,29 @@
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
 
-    if (![peripheral.name hasPrefix:kSBOSSPrefix]) {
-        //return;
+    CGFloat distanceFloat = [self distanceWithRSSI:RSSI.integerValue];
+
+    if (distanceFloat > 30) {
+        return;
     }
 
     NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
+    NSString *name = advertisementData[CBAdvertisementDataLocalNameKey];
+    NSArray *uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey];
+    CBUUID *uuid = uuids.firstObject;
+    NSLog(@"\n--name: %@ \n--UUID: %@ \n", name, uuid.UUIDString);
+
+    if (!name || !uuid) {
+        return;
+    }
+
+    if (![name hasPrefix:kSBOSSPrefix]) {
+        return;
+    }
 
     BLEDevice *device = [[BLEDevice alloc] init];
-    device.name = peripheral.name ?: @"device";
-    device.UUIDString = peripheral.identifier.UUIDString;
+    device.name = name;
+    device.UUIDString = uuid.UUIDString;
 
     BLEDistance *distance = [[BLEDistance alloc] init];
     distance.distanceOnce = [self distanceWithRSSI:RSSI.integerValue];
@@ -307,7 +321,7 @@
 
     switch (peripheral.state) {
             case CBCentralManagerStatePoweredOn:
-            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:@"SBOSS-测试机6", CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
+            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:[NSString stringWithFormat:@"%@%@", kSBOSSPrefix, self.advertisingName], CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:self.advertisingUUID]] }];
             break;
 
         default:

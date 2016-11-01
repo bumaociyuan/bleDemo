@@ -38,6 +38,8 @@ typedef NS_ENUM(NSInteger, BLEMode) {
 
 @property (nonatomic, strong) NSString *advertisingName;
 
+@property (nonatomic, strong) NSString *advertisingUUID;
+
 @property (nonatomic, strong, readonly) NSArray *discoveredDevices;
 
 + (BLEManager *)defaultManager;

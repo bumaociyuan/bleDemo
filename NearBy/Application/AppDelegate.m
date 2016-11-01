@@ -50,12 +50,23 @@
 
 #import "AppDelegate.h"
 
+#define kApplicationUUIDKey @"ApplicationUUIDKey"
+
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+
+    NSString *UUID = [[NSUserDefaults standardUserDefaults] objectForKey:kApplicationUUIDKey];
+    if (!UUID) {
+        CFUUIDRef uuid = CFUUIDCreate(NULL);
+        UUID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
+        [[NSUserDefaults standardUserDefaults] setObject:UUID forKey:kApplicationUUIDKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+
     return YES;
 }
 							
