@@ -278,7 +278,7 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     // We need to add this manually so we have a way to dismiss the keyboard
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonSystemItemDone target:self action:@selector(dismissKeyboard)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(dismissKeyboard)];
     self.navigationItem.rightBarButtonItem = rightButton;
 }
 

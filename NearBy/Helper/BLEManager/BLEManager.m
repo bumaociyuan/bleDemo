@@ -112,10 +112,7 @@
         [self.globalTimer invalidate];
     }
 
-    __weak typeof(self) wf = self;
     self.globalTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(changeBLEMode) userInfo:nil repeats:YES];
-
-
 
 }
 
