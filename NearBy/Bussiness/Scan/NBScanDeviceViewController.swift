@@ -29,7 +29,12 @@ class NBScanDeviceViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        BLEManager.default().stopScan()
+        BLEManager.default().cleanDevices()
+    }
 
     /*
     // MARK: - Navigation
