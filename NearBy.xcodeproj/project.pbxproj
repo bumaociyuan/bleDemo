@@ -44,6 +44,7 @@
 		B9F9161A15D5806400B3B398 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161915D5806400B3B398 /* UIKit.framework */; };
 		B9F9161C15D5806400B3B398 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161B15D5806400B3B398 /* Foundation.framework */; };
 		B9F9161E15D5806400B3B398 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161D15D5806400B3B398 /* CoreGraphics.framework */; };
+		FBE136D31DCC8DCF0008F406 /* TopographyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE136D21DCC8DCF0008F406 /* TopographyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -110,6 +111,7 @@
 		B9F9161915D5806400B3B398 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B9F9161B15D5806400B3B398 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B9F9161D15D5806400B3B398 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		FBE136D21DCC8DCF0008F406 /* TopographyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopographyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 		811654D61DCC69D300E08A46 /* Graphic */ = {
 			isa = PBXGroup;
 			children = (
+				FBE136D21DCC8DCF0008F406 /* TopographyView.swift */,
 				811654D71DCC69D300E08A46 /* NBGraphicViewController.swift */,
 			);
 			path = Graphic;
@@ -462,6 +465,7 @@
 				81B40B551DC6F9C30081E475 /* CenterManager.m in Sources */,
 				81B40B841DC8C57F0081E475 /* AFURLResponseSerialization.m in Sources */,
 				81B40B521DC6F5720081E475 /* BLEManager.m in Sources */,
+				FBE136D31DCC8DCF0008F406 /* TopographyView.swift in Sources */,
 				815FC59C1DC6E66C000239C7 /* main.m in Sources */,
 				81B40B7F1DC8C57F0081E475 /* AFHTTPSessionManager.m in Sources */,
 				81B40B651DC83A430081E475 /* NBLogHelper.m in Sources */,
@@ -584,7 +588,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "NearBy/Application/NearBy-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -612,7 +616,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "NearBy/Application/NearBy-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
