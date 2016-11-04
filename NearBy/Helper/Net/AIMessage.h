@@ -14,6 +14,8 @@
  */
 @property (nonatomic, strong) NSMutableDictionary *body;
 
+@property (nonatomic, strong) NSString *bodyString;
+
 /*说明:消息头，组成HTTP头部
  */
 @property (nonatomic, strong) NSMutableDictionary *header;

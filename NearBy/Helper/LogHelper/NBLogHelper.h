@@ -14,4 +14,8 @@
 
 - (void)writeString:(NSString *)string toFile:(NSString *)fileName type:(NSString *)type;
 
+- (NSString *)readStringFromFile:(NSString *)fileName type:(NSString *)type;
+
+- (void)removeFile:(NSString *)file type:(NSString *)type;
+
 @end

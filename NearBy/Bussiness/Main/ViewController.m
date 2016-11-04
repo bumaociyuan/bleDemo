@@ -56,6 +56,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *scanButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *graphicButton;
+
 @end
 
 @implementation ViewController
@@ -80,6 +82,12 @@
 {
     NBScanDeviceViewController *scanViewController = [[NBScanDeviceViewController alloc] init];
     [self.navigationController pushViewController:scanViewController animated:YES];
+}
+
+- (IBAction)gotoGraphicViewController
+{
+    NBGraphicViewController *graphicViewController = [[NBGraphicViewController alloc] init];
+    [self.navigationController pushViewController:graphicViewController animated:YES];
 }
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		811654D81DCC69D300E08A46 /* NBGraphicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811654D71DCC69D300E08A46 /* NBGraphicViewController.swift */; };
 		815FC59B1DC6E66C000239C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 815FC5811DC6E66C000239C7 /* AppDelegate.m */; };
 		815FC59C1DC6E66C000239C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 815FC5831DC6E66C000239C7 /* main.m */; };
 		815FC59D1DC6E66C000239C7 /* BTLECentralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 815FC5871DC6E66C000239C7 /* BTLECentralViewController.m */; };
@@ -46,6 +47,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		811654D71DCC69D300E08A46 /* NBGraphicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBGraphicViewController.swift; sourceTree = "<group>"; };
 		815FC5801DC6E66C000239C7 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		815FC5811DC6E66C000239C7 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		815FC5821DC6E66C000239C7 /* NearBy-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NearBy-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -125,6 +127,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		811654D61DCC69D300E08A46 /* Graphic */ = {
+			isa = PBXGroup;
+			children = (
+				811654D71DCC69D300E08A46 /* NBGraphicViewController.swift */,
+			);
+			path = Graphic;
+			sourceTree = "<group>";
+		};
 		815FC55C1DC6E4F2000239C7 /* NearBy */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +174,7 @@
 		815FC5841DC6E66C000239C7 /* Bussiness */ = {
 			isa = PBXGroup;
 			children = (
+				811654D61DCC69D300E08A46 /* Graphic */,
 				815FC5B41DC6E6DF000239C7 /* Scan */,
 				815FC5851DC6E66C000239C7 /* Main */,
 			);
@@ -436,6 +447,7 @@
 				815FC5A11DC6E66C000239C7 /* ViewController.m in Sources */,
 				81B40B851DC8C57F0081E475 /* AFURLSessionManager.m in Sources */,
 				815FC59E1DC6E66C000239C7 /* BTLEPeripheralViewController.m in Sources */,
+				811654D81DCC69D300E08A46 /* NBGraphicViewController.swift in Sources */,
 				81B40B8B1DC8C5DD0081E475 /* AIMessage.m in Sources */,
 				81B40B8C1DC8C5DD0081E475 /* AINetEngine.m in Sources */,
 				81B40B821DC8C57F0081E475 /* AFURLConnectionOperation.m in Sources */,

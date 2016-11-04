@@ -56,7 +56,7 @@ class NBScanDeviceViewController: UIViewController {
 
     func startScanDevices() {
         BLEManager.default().delegate = self
-        BLEManager.default().advertisingName = UIDevice.current.name
+        BLEManager.default().advertisingName =  "SBOSS-\(UIDevice.current.name)"
         BLEManager.default().advertisingUUID = UserDefaults.standard.object(forKey: "ApplicationUUIDKey") as! String
         BLEManager.default().startScan()
         //

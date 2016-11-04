@@ -53,5 +53,33 @@
 
 }
 
+- (NSString *)readStringFromFile:(NSString *)fileName type:(NSString *)type
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [directoryPaths objectAtIndex:0];
+    NSString *component = [NSString stringWithFormat:@"%@.%@", fileName, type];
+    NSString *filePath = [documentDirectory stringByAppendingPathComponent:component];
+    NSString *dataString = nil;
+    if ([fileManager fileExistsAtPath:filePath]) {
+        NSData *data = [NSData dataWithContentsOfFile:filePath];
+        dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+
+    return dataString;
+}
+
+- (void)removeFile:(NSString *)file type:(NSString *)type
+{
+    NSArray *directoryPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [directoryPaths objectAtIndex:0];
+    NSString *component = [NSString stringWithFormat:@"%@.%@", file, type];
+    NSString *filePath = [documentDirectory stringByAppendingPathComponent:component];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:filePath]) {
+        [fileManager removeItemAtPath:filePath error:nil];
+    }
+}
+
 
 @end

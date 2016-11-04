@@ -328,11 +328,11 @@ forHTTPHeaderField:(NSString *)field
 
     mutableRequest = [[self requestBySerializingRequest:mutableRequest withParameters:parameters error:error] mutableCopy];
 
-    //AIOCLog(@"\nheader=%@", mutableRequest.allHTTPHeaderFields);
-#warning 将来要在这加log
+    NSLog(@"\nheader=%@\n", mutableRequest.allHTTPHeaderFields);
 
-    //AIOCLog(@"\nbody=%@", [[NSString alloc] initWithData:mutableRequest.HTTPBody encoding:NSUTF8StringEncoding]);
-    //AIOCLog(@"\nurl=%@", mutableRequest.URL.absoluteString);
+
+    NSLog(@"\nbody=%@\n", [[NSString alloc] initWithData:mutableRequest.HTTPBody encoding:NSUTF8StringEncoding]);
+    NSLog(@"\nurl=%@\n", mutableRequest.URL.absoluteString);
 
 	return mutableRequest;
 }

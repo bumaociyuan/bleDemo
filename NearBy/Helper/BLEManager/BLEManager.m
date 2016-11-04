@@ -9,10 +9,12 @@
 #import "BLEManager.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "NBLogHelper.h"
+#import "AINetEngine.h"
+
 
 #define kSBOSSPrefix @"SBOSS-"
 
-
+#define kFileType @"txt"
 
 @interface BLEManager () <CBCentralManagerDelegate, CBPeripheralDelegate, CBPeripheralManagerDelegate>
 {
@@ -125,6 +127,21 @@
 
 - (float)distanceWithRSSI:(NSInteger)rssi
 {
+    NSInteger absRSSI = abs((int)rssi);
+    NSInteger A = 47;
+    NSInteger n = 3.6;
+
+
+    if (absRSSI >= 60 && absRSSI <= 70) {
+        A = 35;
+        n = 3.0;
+    } else if (absRSSI > 70 && absRSSI <= 80) {
+
+    }
+
+
+
+
     int iRssi = abs((int)rssi);
     float power = (iRssi-47)/(10*3.6);
     return pow(10, power);
@@ -170,6 +187,7 @@
 
 }
 
+
 #pragma mark - Make Log File
 
 - (NSString *)currentDateString
@@ -177,12 +195,42 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss zzz"];
 
-    NSString *dateString = [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
+    NSString *dateString = [NSString stringWithFormat:@"%lf", [[NSDate date] timeIntervalSince1970]];
     return dateString;
 }
 
 - (void)handleLogEvent
 {
+
+    if (self.testLogFileName != nil) {
+        // post to server
+        AIMessage *message = [AIMessage message];
+        message.url = @"http://171.221.254.231:3003/data/uploadData";
+
+        NSString *jsonString =  [[NBLogHelper defaultHelper] readStringFromFile:self.testLogFileName type:kFileType];
+
+        if (jsonString.length == 0 || jsonString == nil) {
+            return;
+        }
+
+        if ([jsonString hasSuffix:@","]) {
+            jsonString = [jsonString substringToIndex:jsonString.length - 1];
+        }
+
+
+        NSMutableString *dataString = [[NSMutableString alloc] initWithFormat:@"[%@]", jsonString];
+        NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error = nil;
+        message.body = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSLog(@"%@", error);
+        message.url = @"http://171.221.254.231:3003/data/uploadData";
+
+        [[AINetEngine defaultEngine] postMessage:message success:nil fail:nil];
+        [[NBLogHelper defaultHelper] removeFile:self.testLogFileName type:kFileType];
+
+    }
+
+    // change file name
     NSString *dateString = [self currentDateString];
     self.testLogFileName = [NSString stringWithFormat:@"%@-%@", self.advertisingName, dateString];
 }
@@ -190,7 +238,7 @@
 - (void)startLogging
 {
     [self handleLogEvent];
-    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
+    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
 }
 
 - (void)stopLogging
@@ -199,11 +247,19 @@
     self.testTimer = nil;
 }
 
+
+
+
+
+
+
+
+
 - (void)logDistance:(CGFloat )distance withName:(NSString *)name
 {
     NSString *distanceString = [NSString stringWithFormat:@"%.4f", distance];
-    NSString *dataString = [NSString stringWithFormat:@"{\"from\":\"%@\",\"to\":\"%@\",\"length\":\"%@\",\"date\":\"%@\"},", self.advertisingName, name, distanceString, [self currentDateString]];
-    [[NBLogHelper defaultHelper] writeString:dataString toFile:self.testLogFileName type:@"txt"];
+    NSString *dataString = [NSString stringWithFormat:@"{\"from\":\"%@\",\"to\":\"%@\",\"length\":%@,\"date\":%@},", self.advertisingName, name, distanceString, [self currentDateString]];
+    [[NBLogHelper defaultHelper] writeString:dataString toFile:self.testLogFileName type:kFileType];
 }
 
 #pragma mark - 开始扫描周边设备
@@ -320,7 +376,7 @@
                 BLEDistance *first = de.distanceRecords.firstObject;
                 NSTimeInterval timeBetween = [distance.date timeIntervalSinceDate:first.date];
 
-                if (fabs(distance.distanceOnce - de.distance) > 5) { // 大幅度的波动忽略
+                if (fabs(distance.distanceOnce - de.distance) > 6) { // 大幅度的波动忽略
                     return;
                 } else if (timeBetween > 1.5) { // 不超过3秒
                     [de.distanceRecords removeAllObjects];
@@ -357,7 +413,7 @@
 
     switch (peripheral.state) {
             case CBCentralManagerStatePoweredOn:
-            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:[NSString stringWithFormat:@"%@%@", kSBOSSPrefix, self.advertisingName], CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:self.advertisingUUID]] }];
+            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:self.advertisingName, CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:self.advertisingUUID]] }];
             break;
 
         default:
