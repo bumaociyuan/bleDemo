@@ -45,6 +45,7 @@
 		B9F9161C15D5806400B3B398 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161B15D5806400B3B398 /* Foundation.framework */; };
 		B9F9161E15D5806400B3B398 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9F9161D15D5806400B3B398 /* CoreGraphics.framework */; };
 		FBE136D31DCC8DCF0008F406 /* TopographyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE136D21DCC8DCF0008F406 /* TopographyView.swift */; };
+		FBE136D51DCC94830008F406 /* TopoBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE136D41DCC94830008F406 /* TopoBrain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +113,7 @@
 		B9F9161B15D5806400B3B398 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B9F9161D15D5806400B3B398 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		FBE136D21DCC8DCF0008F406 /* TopographyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopographyView.swift; sourceTree = "<group>"; };
+		FBE136D41DCC94830008F406 /* TopoBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopoBrain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +134,7 @@
 		811654D61DCC69D300E08A46 /* Graphic */ = {
 			isa = PBXGroup;
 			children = (
+				FBE136D41DCC94830008F406 /* TopoBrain.swift */,
 				FBE136D21DCC8DCF0008F406 /* TopographyView.swift */,
 				811654D71DCC69D300E08A46 /* NBGraphicViewController.swift */,
 			);
@@ -453,6 +456,7 @@
 				811654D81DCC69D300E08A46 /* NBGraphicViewController.swift in Sources */,
 				81B40B8B1DC8C5DD0081E475 /* AIMessage.m in Sources */,
 				81B40B8C1DC8C5DD0081E475 /* AINetEngine.m in Sources */,
+				FBE136D51DCC94830008F406 /* TopoBrain.swift in Sources */,
 				81B40B821DC8C57F0081E475 /* AFURLConnectionOperation.m in Sources */,
 				81B40B7E1DC8C57F0081E475 /* AFHTTPRequestOperationManager.m in Sources */,
 				81B40B581DC6F9F20081E475 /* PeripheralManager.m in Sources */,

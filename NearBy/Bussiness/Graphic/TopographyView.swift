@@ -37,7 +37,7 @@ class TopographyView: UIView {
         pointViews.removeAll()
         let radius: CGFloat = 8
         let mutiplier: CGFloat = CGFloat(30)
-        for (i,p) in points.enumerated() {
+        for (i, p) in points.enumerated() {
             let xCoord = p.x * mutiplier
             let yCoord = p.y * mutiplier
             let label = UILabel()
@@ -49,6 +49,7 @@ class TopographyView: UIView {
             label.layer.borderColor = UIColor.black.cgColor
             label.layer.borderWidth = 2
             label.frame = CGRect(x: xCoord, y: yCoord, width: radius*3, height: radius*3)
+            label.sizeToFit()
             addSubview(label)
             pointViews.append(label)
         }

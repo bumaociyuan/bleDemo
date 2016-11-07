@@ -10,28 +10,73 @@ import UIKit
 
 class NBGraphicViewController: UIViewController {
     var topoView: TopographyView!
+    var rotation: CGFloat = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "蓝牙拓扑图"
         view.backgroundColor = UIColor.white
         topoView = TopographyView()
+        topoView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        topoView.center = view.center
         view.addSubview(topoView)
         
         let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(NBGraphicViewController.getServerData))
         navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        setupGestures()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        topoView.frame = view.bounds
+    func setupGestures() {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(NBGraphicViewController.panG(sender:)))
+        view.addGestureRecognizer(pan)
+        
+        let rotate = UIRotationGestureRecognizer(target: self, action: #selector(NBGraphicViewController.rotateAction(sender:)))
+        view.addGestureRecognizer(rotate)
+        
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(NBGraphicViewController.pinchAction(sender:)))
+        view.addGestureRecognizer(pinch)
     }
-
+    
+    @IBAction func rotateAction(sender: UIRotationGestureRecognizer) {
+        var lastRotation = CGFloat()
+        if(sender.state == UIGestureRecognizerState.ended){
+            lastRotation = 0.0;
+        }
+        rotation = lastRotation + sender.rotation
+        let currentTrans = topoView.transform
+        let newTrans = currentTrans.rotated(by: rotation)
+        topoView.transform = newTrans
+        lastRotation = sender.rotation
+        sender.rotation = 0
+    }
+    
+    @IBAction func pinchAction(sender: UIPinchGestureRecognizer) {
+        let currentTrans = topoView.transform
+        topoView.transform = currentTrans.scaledBy(x: sender.scale, y: sender.scale)
+        sender.scale = 1.0
+    }
+    
+    func panG(sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: view)
+        topoView.center = CGPoint(x: topoView.center.x + translation.x, y: topoView.center.y + translation.y)
+        sender.setTranslation(.zero, in: view)
+    }
+    
     func getServerData() {
         let message = AIMessage()
         message.url = "http://171.221.254.231:3003/data/getAllPoints"
-        AINetEngine.default().post(message, success: { (response) -> Void in
-            print(response)
+        AINetEngine.default().post(message, success: { [weak self] (response) -> Void in
+            let points = response as! [[String: AnyObject]]
+            print(points)
+            let brain = TopoBrain()
+            var result = [TopoPoint]()
+            for p in points {
+                let point = brain.parse(point: p)
+                result.append(TopoPoint(x: point.x, y: point.y, id: "fsad"))
+            }
+            //TODO: use topobrain
+            self?.topoView.points = result
         }, fail: { (ErrorType, error) -> Void in
 
         })

@@ -66,12 +66,13 @@
     return self;
 }
 
-- (void)addHeaders:(NSDictionary *)headers
+- (void)addHeadersOfMessage:(AIMessage *)message
 {
-    
     NSMutableDictionary *allHeaders = [[NSMutableDictionary alloc] init];
     [allHeaders addEntriesFromDictionary:self.commonHeaders];
-    [allHeaders addEntriesFromDictionary:headers];
+    [allHeaders addEntriesFromDictionary:message.header];
+    
+
     
     for (NSString *key in allHeaders.allKeys) {
         id value = [allHeaders objectForKey:key];
@@ -86,17 +87,17 @@
 - (void)postMessage:(AIMessage *)message success:(net_success_block)success fail:(net_fail_block)fail
 {
     // 设置头部
-    [self addHeaders:message.header];
-    	
+    [self addHeadersOfMessage:message];
+    
     __weak typeof(self) weakSelf = self;
     __weak AFHTTPSessionManager *weakManager = _sessionManager;
-    NSURLSessionDataTask *curTask = [_sessionManager POST:message.url parameters:message.body success:^(NSURLSessionDataTask *task, id responseObject) {    
+    NSURLSessionDataTask *curTask = [_sessionManager POST:message.url parameters:message.body success:^(NSURLSessionDataTask *task, id responseObject) {
         [weakManager saveServerCookie];
         [weakSelf parseSuccessResponseWithTask:task
                                 responseObject:responseObject
                                        success:success
                                           fail:fail];
-
+        
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [weakSelf parseFailResponseWithTask:task
                                       error:error
@@ -114,7 +115,7 @@
 - (void)getMessage:(AIMessage *)message success:(net_success_block)success fail:(net_fail_block)fail
 {
     // 设置头部
-    [self addHeaders:message.header];
+    [self addHeadersOfMessage:message];
     
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *curTask = [_sessionManager GET:message.url parameters:message.body success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -189,28 +190,10 @@
                                 fail:(net_fail_block)fail
 {
     [self removeCompletedTask:task];
-    
-    
-    NSDictionary *response = nil;
-    
-    if ([responseObject isKindOfClass:[NSDictionary class]]) {
-        response = (NSDictionary *)responseObject;
-    }
-    
-    if (!response && fail) {
-        fail(AINetErrorFormat, @"报文格式错误");
-        return;
-    }
+ 
 
-    if ([responseObject isKindOfClass:[NSArray class]]) {
-        NSArray * newRes = (NSArray *)responseObject;
-        if (newRes.count <= 0 ){
-            fail(AINetErrorFormat, @"返回值为空");
-            return;
-        }
-        
-    }
-    
+    success(responseObject);
+   
 }
 
 - (void)parseFailResponseWithTask:(NSURLSessionDataTask *)task
@@ -222,7 +205,6 @@
     
     AINetError netError = [self netErrorFromNSError:error];
     if (fail && netError != AINetErrorCancelled) {
-
         fail(netError, @"网络错误,请重试.");
     }
 }
@@ -238,5 +220,13 @@
     return netError;
 }
 
+
+- (void)testPostMessage:(AIMessage *)message{
+    
+    [self postMessage:message success:^(id responseObject) {
+        
+    } fail:^(AINetError error, NSString *errorDes) {
+    }];
+}
 
 @end
