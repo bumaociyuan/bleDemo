@@ -16,6 +16,12 @@
 
 #define kFileType @"txt"
 
+#ifdef DEBUG_MODE
+#define DLog( s, ... ) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define DLog( s, ... )
+#endif
+
 @interface BLEManager () <CBCentralManagerDelegate, CBPeripheralDelegate, CBPeripheralManagerDelegate>
 {
     NSMutableArray *_discoveredDevices;
@@ -184,6 +190,8 @@
     } else {
         _currentDeviceCount = self.discoveredDevices.count;
     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLE_MODE_CHANGED" object:nil];
 
 }
 
