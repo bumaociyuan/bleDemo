@@ -40,7 +40,7 @@ class TopographyView: UIView {
             let xCoord = p.x * mutiplier
             let yCoord = p.y * mutiplier
             let label = UILabel()
-            label.text = p.id
+            label.text = "   " + p.id
             label.backgroundColor = UIColor.clear
             label.clipsToBounds = true
             label.frame = CGRect(x: xCoord, y: yCoord, width: 200, height: 25)
