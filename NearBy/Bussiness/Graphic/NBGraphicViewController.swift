@@ -25,6 +25,8 @@ class NBGraphicViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightBarButtonItem
         
         setupGestures()
+        
+        getServerData()
     }
     
     func setupGestures() {
@@ -73,9 +75,9 @@ class NBGraphicViewController: UIViewController {
             var result = [TopoPoint]()
             for p in points {
                 let point = brain.parse(point: p)
-                result.append(TopoPoint(x: point.x, y: point.y, id: "fsad"))
+                print(point)
+                result.append(TopoPoint(x: point.x, y: point.y, id: p["id"] as! String))
             }
-            //TODO: use topobrain
             self?.topoView.points = result
         }, fail: { (ErrorType, error) -> Void in
 

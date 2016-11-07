@@ -35,28 +35,25 @@ class TopographyView: UIView {
             l.removeFromSuperview()
         }
         pointViews.removeAll()
-        let radius: CGFloat = 8
         let mutiplier: CGFloat = CGFloat(30)
         for (i, p) in points.enumerated() {
             let xCoord = p.x * mutiplier
             let yCoord = p.y * mutiplier
             let label = UILabel()
             label.text = p.id
+            label.backgroundColor = UIColor.clear
             label.clipsToBounds = true
-            label.layer.cornerRadius = 4
-            label.textAlignment = .center
-            label.backgroundColor = UIColor.red
-            label.layer.borderColor = UIColor.black.cgColor
-            label.layer.borderWidth = 2
-            label.frame = CGRect(x: xCoord, y: yCoord, width: radius*3, height: radius*3)
-            label.sizeToFit()
+            label.frame = CGRect(x: xCoord, y: yCoord, width: 200, height: 25)
             addSubview(label)
+            
+            let pot = UIView(frame: CGRect(x: label.frame.minX, y: label.frame.minY, width: 10, height: 10))
+            pot.layer.cornerRadius = 5
+            pot.backgroundColor = UIColor.red
+            addSubview(pot)
             pointViews.append(label)
         }
     }
-    
-    
-    
+
     var pointViews: [UILabel] = []
     var points: [TopoPoint] = [] {
         didSet {

@@ -34,6 +34,7 @@ class TopoBrain: NSObject {
         
         result.x = unwrap(x)
         result.y = unwrap(y)
+        print(result)
         
         return result
     }
