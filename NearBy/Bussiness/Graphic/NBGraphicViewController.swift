@@ -24,7 +24,6 @@ class NBGraphicViewController: UIViewController {
         topoView.center = view.center
         view.addSubview(topoView)
         
-        
         setupNavigationItems()
         hideLoading()
         setupGestures()
@@ -34,6 +33,7 @@ class NBGraphicViewController: UIViewController {
     func showLoading() {
         navigationItem.rightBarButtonItems = [loadingBarButtonItem]
     }
+    
     func hideLoading() {
         navigationItem.rightBarButtonItems = [showIdBarButtonItem,refreshBarButtonItem]
     }
