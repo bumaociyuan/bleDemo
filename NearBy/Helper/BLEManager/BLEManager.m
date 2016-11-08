@@ -120,13 +120,14 @@
         [self.globalTimer invalidate];
     }
 
-    self.globalTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(changeBLEMode) userInfo:nil repeats:YES];
+    self.globalTimer = [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(changeBLEMode) userInfo:nil repeats:YES];
 
 }
 
 
 - (float)distanceWithRSSI:(NSInteger)rssi
 {
+    // Test
     NSInteger absRSSI = abs((int)rssi);
     NSInteger A = 47;
     NSInteger n = 3.6;
@@ -238,7 +239,7 @@
 - (void)startLogging
 {
     [self handleLogEvent];
-    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
+    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
 }
 
 - (void)stopLogging

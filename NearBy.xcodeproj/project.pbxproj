@@ -401,7 +401,7 @@
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
 					B9F9161415D5806400B3B398 = {
-						DevelopmentTeam = 388D56L7YB;
+						DevelopmentTeam = T2362RFKT6;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -576,7 +576,7 @@
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 388D56L7YB;
+				DEVELOPMENT_TEAM = T2362RFKT6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NearBy/Frameworks",
@@ -586,7 +586,7 @@
 				INFOPLIST_FILE = "NearBy/Support Files/NearBy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.asiainfo.dcloud.zx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.asiainfo.dcloud;
 				PRODUCT_NAME = NearBy;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -605,7 +605,7 @@
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 388D56L7YB;
+				DEVELOPMENT_TEAM = T2362RFKT6;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NearBy/Frameworks",
@@ -615,7 +615,7 @@
 				INFOPLIST_FILE = "NearBy/Support Files/NearBy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.asiainfo.dcloud.zx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.asiainfo.dcloud;
 				PRODUCT_NAME = NearBy;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;

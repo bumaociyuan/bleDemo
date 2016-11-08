@@ -75,7 +75,7 @@ extension NBScanDeviceViewController: BLEManagerDelegate {
         tableView.reloadData()
     }
 
-    func managerDidFind(_ device: BLEDevice!) {
+    private func managerDidFind(_ device: BLEDevice!) {
 
         if discoveredDevices.count == 0 {
             discoveredDevices.append(device)
