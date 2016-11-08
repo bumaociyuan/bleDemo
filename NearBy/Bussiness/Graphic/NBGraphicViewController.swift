@@ -17,7 +17,7 @@ class NBGraphicViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "蓝牙拓扑图"
+        self.title = "拓扑图"
         view.backgroundColor = UIColor.white
         topoView = TopographyView()
         topoView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)

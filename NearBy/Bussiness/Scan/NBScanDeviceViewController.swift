@@ -90,6 +90,20 @@ extension NBScanDeviceViewController: UITableViewDelegate {
         return 30
     }
 
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
+
+        let label = UPLabel(frame: CGRect(x: 15, y: 0, width: tableView.frame.width, height: 30))
+
+        label.text = "    扫描中..."
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.verticalAlignment = UPVerticalAlignmentMiddle;
+
+        return label
+    }
+
 }
 
 

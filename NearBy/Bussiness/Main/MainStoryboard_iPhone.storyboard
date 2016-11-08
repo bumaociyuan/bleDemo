@@ -84,11 +84,11 @@
             </objects>
             <point key="canvasLocation" x="985.5" y="-435.5"/>
         </scene>
-        <!--Item 2-->
+        <!--拓扑图-->
         <scene sceneID="yYQ-Vr-RrS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="URY-zK-wSc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item 2" image="triangle_128" id="bbg-Gy-DK7"/>
+                    <tabBarItem key="tabBarItem" title="拓扑图" image="triangle_128" id="bbg-Gy-DK7"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gnn-p2-JmL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -105,8 +105,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bluetooth" width="33" height="33"/>
-        <image name="triangle_128" width="128" height="128"/>
+        <image name="bluetooth" width="30" height="30"/>
+        <image name="triangle_128" width="30" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
