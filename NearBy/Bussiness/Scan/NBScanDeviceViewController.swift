@@ -19,32 +19,14 @@ class NBScanDeviceViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         discoveredDevices = [BLEDevice]()
-        // Do any additional setup after loading the view.
-
+        title = "扫描"
         makeTabelView()
         startScanDevices()
+        
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "BLE_MODE_CHANGED"), object: nil, queue: nil, using: { n in
+//            print(n)
+//        })
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        BLEManager.default().stopScan()
-        BLEManager.default().cleanDevices()
-    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     func makeTabelView() {
         tableView = UITableView(frame: view.bounds, style: .grouped)
@@ -53,15 +35,11 @@ class NBScanDeviceViewController: UIViewController {
         view.addSubview(tableView)
     }
 
-
     func startScanDevices() {
         BLEManager.default().delegate = self
         BLEManager.default().advertisingName =  "SBOSS-\(UIDevice.current.name)"
         BLEManager.default().advertisingUUID = UserDefaults.standard.object(forKey: "ApplicationUUIDKey") as! String
         BLEManager.default().startScan()
-        //
-
-
     }
 
 }
@@ -112,20 +90,6 @@ extension NBScanDeviceViewController: UITableViewDelegate {
         return 30
     }
 
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-
-        let label = UPLabel(frame: CGRect(x: 15, y: 0, width: tableView.frame.width, height: 30))
-
-        label.text = "附近的设备"
-        label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.verticalAlignment = UPVerticalAlignmentMiddle;
-
-        return label
-    }
-
 }
 
 
@@ -139,19 +103,26 @@ extension NBScanDeviceViewController: UITableViewDataSource {
         return discoveredDevices.count
     }
 
-
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         let device: BLEDevice = discoveredDevices[indexPath.row]
-
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "DeviceCell")
-
         cell.selectionStyle = .none
-        cell.textLabel?.text = device.name
+        cell.textLabel?.text = device.name.stripePrefix()
         cell.detailTextLabel?.text = "\(device.distance)"
-
         return cell
+    }
+}
+
+extension String {
+    func stripePrefix() -> String {
+        if self.hasPrefix("SBOSS-") {
+            let i = index(self.startIndex, offsetBy: 6)
+            let result = self.substring(from: i)
+            return result
+        }
+        else {
+            return self
+        }
     }
 }
 

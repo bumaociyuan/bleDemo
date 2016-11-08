@@ -11,6 +11,9 @@ import UIKit
 class NBGraphicViewController: UIViewController {
     var topoView: TopographyView!
     var rotation: CGFloat = 0
+    var refreshBarButtonItem: UIBarButtonItem!
+    var showIdBarButtonItem: UIBarButtonItem!
+    var loadingBarButtonItem: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,12 +24,30 @@ class NBGraphicViewController: UIViewController {
         topoView.center = view.center
         view.addSubview(topoView)
         
-        let rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(NBGraphicViewController.getServerData))
-        navigationItem.rightBarButtonItem = rightBarButtonItem
-        
+        setupNavigationItems()
+        hideLoading()
         setupGestures()
-        
         getServerData()
+    }
+    
+    func showLoading() {
+        navigationItem.rightBarButtonItems = [loadingBarButtonItem]
+    }
+    
+    func hideLoading() {
+        navigationItem.rightBarButtonItems = [showIdBarButtonItem,refreshBarButtonItem]
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    func setupNavigationItems() {
+        refreshBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(NBGraphicViewController.getServerData))
+        showIdBarButtonItem = UIBarButtonItem(title: "显示ID", style: .plain, target: self, action: #selector(NBGraphicViewController.toggleId))
+        let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        loadingView.startAnimating()
+        loadingBarButtonItem = UIBarButtonItem(customView: loadingView)
     }
     
     func setupGestures() {
@@ -38,6 +59,8 @@ class NBGraphicViewController: UIViewController {
         
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(NBGraphicViewController.pinchAction(sender:)))
         view.addGestureRecognizer(pinch)
+        
+        pinch.require(toFail: rotate)
     }
     
     @IBAction func rotateAction(sender: UIRotationGestureRecognizer) {
@@ -65,17 +88,24 @@ class NBGraphicViewController: UIViewController {
         sender.setTranslation(.zero, in: view)
     }
     
+    func toggleId() {
+        topoView.hideId = !topoView.hideId
+    }
+    
     func getServerData() {
+        topoView.clearAllPoints()
+        showLoading()
         let message = AIMessage()
         message.url = "http://171.221.254.231:3003/data/getAllPoints"
         AINetEngine.default().post(message, success: { [weak self] (response) -> Void in
+            self?.hideLoading()
             let points = response as! [[String: AnyObject]]
-            print(points)
+//            print(points)
             let brain = TopoBrain()
             var result = [TopoPoint]()
             for p in points {
                 let point = brain.parse(point: p)
-                print(point)
+//                print(point)
                 result.append(TopoPoint(x: point.x, y: point.y, id: p["id"] as! String))
             }
             self?.topoView.points = result
