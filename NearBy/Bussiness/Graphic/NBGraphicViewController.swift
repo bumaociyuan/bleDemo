@@ -38,6 +38,10 @@ class NBGraphicViewController: UIViewController {
         navigationItem.rightBarButtonItems = [showIdBarButtonItem,refreshBarButtonItem]
     }
     
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
     func setupNavigationItems() {
         refreshBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(NBGraphicViewController.getServerData))
         showIdBarButtonItem = UIBarButtonItem(title: "显示ID", style: .plain, target: self, action: #selector(NBGraphicViewController.toggleId))
