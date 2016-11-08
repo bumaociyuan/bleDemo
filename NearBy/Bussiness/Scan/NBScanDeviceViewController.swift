@@ -108,7 +108,7 @@ extension NBScanDeviceViewController: UITableViewDataSource {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "DeviceCell")
         cell.selectionStyle = .none
         cell.textLabel?.text = device.name.stripePrefix()
-        cell.detailTextLabel?.text = "\(device.distance)"
+        cell.detailTextLabel?.text = String(format: "距离：%.2f", device.distance)
         return cell
     }
 }
