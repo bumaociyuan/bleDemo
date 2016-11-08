@@ -22,7 +22,6 @@ class NBScanDeviceViewController: UIViewController {
         title = "扫描"
         makeTabelView()
         startScanDevices()
-        
 //        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "BLE_MODE_CHANGED"), object: nil, queue: nil, using: { n in
 //            print(n)
 //        })
