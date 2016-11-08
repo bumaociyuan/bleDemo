@@ -126,7 +126,7 @@
         [self.globalTimer invalidate];
     }
 
-    self.globalTimer = [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(changeBLEMode) userInfo:nil repeats:YES];
+    self.globalTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(changeBLEMode) userInfo:nil repeats:YES];
 
 }
 
@@ -247,7 +247,7 @@
 - (void)startLogging
 {
     [self handleLogEvent];
-    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
+    self.testTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(handleLogEvent) userInfo:nil repeats:YES];
 }
 
 - (void)stopLogging
@@ -255,10 +255,6 @@
     [self.testTimer invalidate];
     self.testTimer = nil;
 }
-
-
-
-
 
 
 
@@ -387,7 +383,7 @@
 
                 if (fabs(distance.distanceOnce - de.distance) > 6) { // 大幅度的波动忽略
                     return;
-                } else if (timeBetween > 1.5) { // 不超过3秒
+                } else if (timeBetween > 1) { // 不超过3秒
                     [de.distanceRecords removeAllObjects];
                     [de.distanceRecords addObject:distance];
                 } else if (de.distanceRecords.count < 3) { // 最多记录3次

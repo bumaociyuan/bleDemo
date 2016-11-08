@@ -15,7 +15,6 @@
 		815FC5A01DC6E66C000239C7 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 815FC58B1DC6E66C000239C7 /* MainStoryboard_iPhone.storyboard */; };
 		815FC5A11DC6E66C000239C7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 815FC58E1DC6E66C000239C7 /* ViewController.m */; };
 		815FC5B11DC6E6BA000239C7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 815FC5AC1DC6E6BA000239C7 /* InfoPlist.strings */; };
-		815FC5B21DC6E6BA000239C7 /* NearBy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 815FC5AE1DC6E6BA000239C7 /* NearBy-Info.plist */; };
 		815FC5B31DC6E6BA000239C7 /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 815FC5B01DC6E6BA000239C7 /* ReadMe.txt */; };
 		815FC5B61DC6E6DF000239C7 /* NBScanDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815FC5B51DC6E6DF000239C7 /* NBScanDeviceViewController.swift */; };
 		81B40B4E1DC6F28F0081E475 /* UPLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 81B40B4D1DC6F28F0081E475 /* UPLabel.m */; };
@@ -369,7 +368,7 @@
 		B9F9160C15D5806400B3B398 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = Apple;
 				TargetAttributes = {
 					B9F9161415D5806400B3B398 = {
@@ -404,7 +403,6 @@
 				815FC5B11DC6E6BA000239C7 /* InfoPlist.strings in Resources */,
 				FB74048F1DD06BBA0046DF0D /* Images.xcassets in Resources */,
 				815FC5A01DC6E66C000239C7 /* MainStoryboard_iPhone.storyboard in Resources */,
-				815FC5B21DC6E6BA000239C7 /* NearBy-Info.plist in Resources */,
 				815FC5B31DC6E6BA000239C7 /* ReadMe.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -96,7 +96,7 @@ extension NBScanDeviceViewController: UITableViewDelegate {
 
         let label = UPLabel(frame: CGRect(x: 15, y: 0, width: tableView.frame.width, height: 30))
 
-        label.text = "    扫描中..."
+        label.text = "     扫描中..."
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 16)
         label.verticalAlignment = UPVerticalAlignmentMiddle;
@@ -122,7 +122,7 @@ extension NBScanDeviceViewController: UITableViewDataSource {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "DeviceCell")
         cell.selectionStyle = .none
         cell.textLabel?.text = device.name.stripePrefix()
-        cell.detailTextLabel?.text = String(format: "距离：%.2f", device.distance)
+        cell.detailTextLabel?.text = String(format: "距离：%.2fm", device.distance)
         return cell
     }
 }

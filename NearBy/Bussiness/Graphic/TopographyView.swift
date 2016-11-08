@@ -56,27 +56,36 @@ class TopographyView: UIView {
         }
         idLabels.removeAll()
         let mutiplier: CGFloat = CGFloat(30)
-        for (i, p) in points.enumerated() {
+        for (_, p) in points.enumerated() {
             let xCoord = p.x * mutiplier
             let yCoord = p.y * mutiplier
-            let label = UILabel()
-            label.isHidden = true
-            label.text = "     " + p.id.stripePrefix()
-            label.backgroundColor = UIColor.clear
-            label.clipsToBounds = true
-            label.frame = CGRect(x: xCoord, y: yCoord, width: 200, height: 25)
-            addSubview(label)
-            idLabels.append(label)
-            
-            var potWidth: CGFloat = 10
+
+            var potSize: CGFloat = 10
             if p.id == BLEManager.default().advertisingName {
-               potWidth = 20
+                potSize = 20
             }
-            let pot = UIView(frame: CGRect(x: label.frame.minX, y: label.frame.minY, width: potWidth, height: potWidth))
-            pot.layer.cornerRadius = potWidth / 2
+
+            // 绘点
+            let pot = UIView(frame: CGRect(x: xCoord, y: yCoord, width: potSize, height: potSize))
+            pot.layer.cornerRadius = potSize / 2
             pot.backgroundColor = UIColor.red
             addSubview(pot)
             pointViews.append(pot)
+
+
+            // 绘name
+            let label = UPLabel()
+            label.isHidden = true
+            label.text = p.id.stripePrefix()
+            label.font = UIFont.systemFont(ofSize: 6)
+            label.backgroundColor = UIColor.clear
+            label.clipsToBounds = true
+            label.frame = CGRect(x: pot.frame.minX + potSize, y: pot.frame.minY, width: 200, height: potSize)
+            label.verticalAlignment = UPVerticalAlignmentMiddle
+            addSubview(label)
+            idLabels.append(label)
+            
+
         }
     }
 
