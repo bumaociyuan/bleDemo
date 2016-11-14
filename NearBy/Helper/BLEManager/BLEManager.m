@@ -11,6 +11,7 @@
 #import "NBLogHelper.h"
 #import "AINetEngine.h"
 
+#define kSBOSSServiceIdentifier @"CB284D88-5317-4FB4-9621-C5A3A49E6155"
 
 #define kSBOSSPrefix @"SBOSS-"
 
@@ -45,6 +46,10 @@
 @property (strong, nonatomic) CBPeripheral          *discoveredPeripheral;
 @property (strong, nonatomic) NSMutableData         *data;
 
+//
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
+@property (nonatomic, strong) NSTimer *backgroundTimer;
+
 @end
 
 
@@ -62,6 +67,7 @@
     dispatch_once(&once, ^{
         defaultManager = [[BLEManager alloc] init];
         [defaultManager initialManagers];
+        [defaultManager setupBackgroundTask];
     });
 
     return defaultManager;
@@ -114,6 +120,59 @@
 {
     _currentDeviceCount = 0;
     [_discoveredDevices removeAllObjects];
+}
+
+
+
+
+#pragma mark - Run Background ---
+
+// Declare Private property
+
+
+//@end
+// ...
+
+// Copy into
+//@implementation
+
+- (void)setupBackgroundTask {
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didEnterBackground:)
+                                                 name: UIApplicationDidEnterBackgroundNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(willEnterForeground:)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
+}
+
+- (void)didEnterBackground: (NSNotification *)notification {
+    [self keepAlive];
+}
+
+- (void) keepAlive {
+
+
+    NSTimeInterval backgroundTimeRemaining = [[UIApplication sharedApplication] backgroundTimeRemaining];
+    self.backgroundTimer = [NSTimer scheduledTimerWithTimeInterval:backgroundTimeRemaining / 2 target:self selector:@selector(keepAlive) userInfo:nil repeats:NO];
+
+    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+        [self keepAlive];
+    }];
+
+    [self changeBLEMode];
+    [self startScan];
+
+}
+
+- (void)willEnterForeground: (NSNotification *)notification {
+    if (self.backgroundTask != UIBackgroundTaskInvalid) {
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+        [self.backgroundTimer invalidate];
+        self.backgroundTimer = nil;
+    }
 }
 
 
@@ -182,7 +241,7 @@
         }
 
         NSInteger randomSeconds = arc4random() % 2;
-
+        NSLog(@"random %ld seconds", randomSeconds);
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(randomSeconds * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self startScan];
         });
@@ -191,8 +250,6 @@
     } else {
         _currentDeviceCount = self.discoveredDevices.count;
     }
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BLE_MODE_CHANGED" object:nil];
 
 }
 
@@ -273,8 +330,8 @@
 - (void)centralScanForPeripherals
 {
 
-    [self.centralManager scanForPeripheralsWithServices:nil
-                                                options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+    [self.centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:kSBOSSServiceIdentifier]]
+                                                options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @(YES) }];
 }
 
 #pragma mark - 开始扫描中心设备
@@ -341,19 +398,27 @@
     if (distanceFloat > 30) {
         return;
     }
-
-    NSLog(@"Discovered %@ at %@", peripheral.name, RSSI);
+    for (NSInteger i = 0; i < peripheral.services.count; i++) {
+        CBService *service = peripheral.services[i];
+        NSLog(@"service UUID is %@", service.UUID);
+    }
+    NSLog(@"Discovered %@ at %@", peripheral.identifier.UUIDString, RSSI);
     NSString *name = advertisementData[CBAdvertisementDataLocalNameKey];
-    NSArray *uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey];
-    CBUUID *uuid = uuids.firstObject;
-    NSLog(@"\n--name: %@ \n--UUID: %@ \n", name, uuid.UUIDString);
 
-    if (!name || !uuid) {
-        return;
+    if ([name hasPrefix:@"SBOSS"]) {
+        NSLog(@"found it !");
     }
 
-    if (![name hasPrefix:kSBOSSPrefix]) {
+    NSArray *uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey];
+    CBUUID *adverUUID = uuids.firstObject;
+    CBUUID *uuid = (CBUUID*)peripheral.identifier;
+    NSLog(@"\n--name: %@ \n--UUID: %@ \n", name, uuid.UUIDString);
+
+    if (![adverUUID.UUIDString isEqualToString:kSBOSSServiceIdentifier]) {
         return;
+    }
+    if (name.length == 0) {
+        name = @"SBOSS-deviceUnkown";
     }
 
     // Test
@@ -377,6 +442,11 @@
         for (NSInteger i = 0; i < _discoveredDevices.count; i++) {
             BLEDevice *de = [_discoveredDevices objectAtIndex:i];
             if ([de.UUIDString isEqualToString:device.UUIDString]) {
+
+                if ([de.name isEqualToString:@"SBOSS-deviceUnkown"]) {
+                    de.name = device.name;
+                }
+
                 // 记录三秒内的3-5次记录，求平均值
                 BLEDistance *first = de.distanceRecords.firstObject;
                 NSTimeInterval timeBetween = [distance.date timeIntervalSinceDate:first.date];
@@ -418,7 +488,8 @@
 
     switch (peripheral.state) {
             case CBCentralManagerStatePoweredOn:
-            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:self.advertisingName, CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:self.advertisingUUID]] }];
+            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:self.advertisingName, CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:kSBOSSServiceIdentifier]] }];
+
             break;
 
         default:
