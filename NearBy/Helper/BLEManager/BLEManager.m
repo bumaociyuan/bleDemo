@@ -11,7 +11,7 @@
 #import "NBLogHelper.h"
 #import "AINetEngine.h"
 
-#define kSBOSSServiceIdentifier @"CB284D88-5317-4FB4-9621-C5A3A49E6155"
+#define kSBOSSServiceIdentifier @"ABCDEF88-5317-4FB4-9621-C5A3A49E6155"
 
 #define kSBOSSPrefix @"SBOSS-"
 
@@ -49,6 +49,7 @@
 //
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
 @property (nonatomic, strong) NSTimer *backgroundTimer;
+
 
 @end
 
@@ -161,7 +162,7 @@
         [self keepAlive];
     }];
 
-    [self changeBLEMode];
+    [self watchTheStatus];
     [self startScan];
 
 }
@@ -395,7 +396,7 @@
 {
     CGFloat distanceFloat = [self distanceWithRSSI:RSSI.integerValue];
 
-    if (distanceFloat > 30) {
+    if (distanceFloat > 20) {
         return;
     }
     for (NSInteger i = 0; i < peripheral.services.count; i++) {
@@ -405,34 +406,49 @@
     NSLog(@"Discovered %@ at %@", peripheral.identifier.UUIDString, RSSI);
     NSString *name = advertisementData[CBAdvertisementDataLocalNameKey];
 
-    if ([name hasPrefix:@"SBOSS"]) {
-        NSLog(@"found it !");
+    if (self.backgroundTask == UIBackgroundTaskInvalid && name.length == 0 ) {
+        return;
     }
 
-    NSArray *uuids = advertisementData[CBAdvertisementDataServiceUUIDsKey];
-    CBUUID *adverUUID = uuids.firstObject;
+    if (![name hasPrefix:@"SBOSS"]) {
+        return;
+    }
+
+    NSArray *adertisingUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey];
+    CBUUID *adertisingUUID = (CBUUID*)adertisingUUIDs.firstObject;
     CBUUID *uuid = (CBUUID*)peripheral.identifier;
     NSLog(@"\n--name: %@ \n--UUID: %@ \n", name, uuid.UUIDString);
 
-    if (![adverUUID.UUIDString isEqualToString:kSBOSSServiceIdentifier]) {
+    if (![adertisingUUID.UUIDString isEqualToString:kSBOSSServiceIdentifier]) {
         return;
     }
-    if (name.length == 0) {
-        name = @"SBOSS-deviceUnkown";
-    }
 
-    // Test
-    [self logDistance:distanceFloat withName:name];
+
 
     BLEDevice *device = [[BLEDevice alloc] init];
     device.name = name;
     device.UUIDString = uuid.UUIDString;
+    device.absRSSI = labs(RSSI.integerValue);
 
     BLEDistance *distance = [[BLEDistance alloc] init];
-    distance.distanceOnce = [self distanceWithRSSI:RSSI.integerValue];
+    distance.distanceOnce = distanceFloat;
     distance.date = [NSDate date];
     device.distanceRecords = [[NSMutableArray alloc] initWithObjects:distance, nil];
 
+    /*
+    if (self.backgroundTask == UIBackgroundTaskInvalid) {
+        [self forgroundHandleDevice:device atDistance:distance];
+    } else {
+        [self backgroundHandleDevice:device atDistance:distance];
+    }
+     */
+
+    [self forgroundHandleDevice:device atDistance:distance];
+
+}
+
+- (void)forgroundHandleDevice:(BLEDevice *)device atDistance:(BLEDistance *)distance
+{
     if (_discoveredDevices.count == 0) {
         [_discoveredDevices addObject:device];
     } else {
@@ -441,23 +457,27 @@
 
         for (NSInteger i = 0; i < _discoveredDevices.count; i++) {
             BLEDevice *de = [_discoveredDevices objectAtIndex:i];
-            if ([de.UUIDString isEqualToString:device.UUIDString]) {
+            if ([de.UUIDString isEqualToString:device.UUIDString] || [de.name isEqualToString:device.name]) {
 
-                if ([de.name isEqualToString:@"SBOSS-deviceUnkown"]) {
-                    de.name = device.name;
-                }
-
+                de.UUIDString = device.UUIDString;
                 // 记录三秒内的3-5次记录，求平均值
                 BLEDistance *first = de.distanceRecords.firstObject;
                 NSTimeInterval timeBetween = [distance.date timeIntervalSinceDate:first.date];
 
-                if (fabs(distance.distanceOnce - de.distance) > 6) { // 大幅度的波动忽略
+                // 距离过滤
+                if (fabs(distance.distanceOnce - de.distance) > 2) { // 大幅度的波动忽略
                     return;
                 } else if (timeBetween > 1) { // 不超过3秒
                     [de.distanceRecords removeAllObjects];
                     [de.distanceRecords addObject:distance];
+                    de.absRSSI = device.absRSSI;
+                    [self logDistance:distance.distanceOnce withName:device.name];
+                } else if (timeBetween <=1 && device.absRSSI < de.absRSSI) { // 信号强度过滤
+                    de.absRSSI = device.absRSSI;
+                    [self logDistance:distance.distanceOnce withName:device.name];
                 } else if (de.distanceRecords.count < 3) { // 最多记录3次
                     [de.distanceRecords addObject:distance];
+                    [self logDistance:distance.distanceOnce withName:device.name];
                 }
 
                 findSame = YES;
@@ -466,15 +486,20 @@
         }
 
         if (!findSame) {
+            // Test
+            [self logDistance:distance.distanceOnce withName:device.name];
             [_discoveredDevices addObject:device];
         }
     }
-
+    
     [self.delegate managerDidFindDevices:_discoveredDevices];
 
 }
 
+- (void)backgroundHandleDevice:(BLEDevice *)device atDistance:(BLEDistance *)distance
+{
 
+}
 
 
 #pragma mark - CBPeripheralManagerDelegate
@@ -488,8 +513,18 @@
 
     switch (peripheral.state) {
             case CBCentralManagerStatePoweredOn:
-            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:self.advertisingName, CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:kSBOSSServiceIdentifier]] }];
+        {
+            CBUUID *serviceUUID = [CBUUID UUIDWithString:self.advertisingUUID];
+            CBMutableCharacteristic *characteristic =
+            [[CBMutableCharacteristic alloc] initWithType:serviceUUID
+                                               properties:CBCharacteristicPropertyRead
+                                                    value:nil permissions:CBAttributePermissionsReadable];
 
+            CBMutableService *service = [[CBMutableService alloc] initWithType:serviceUUID primary:YES];
+            service.characteristics = @[characteristic];
+            [self.peripheralManager addService:service];
+            [self.peripheralManager startAdvertising:@{CBAdvertisementDataLocalNameKey:self.advertisingName, CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:kSBOSSServiceIdentifier]] }];
+        }
             break;
 
         default:

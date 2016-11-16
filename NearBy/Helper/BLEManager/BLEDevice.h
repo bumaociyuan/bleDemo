@@ -27,6 +27,8 @@
 
 @property (nonatomic) CGFloat distance;
 
+@property (nonatomic) NSInteger absRSSI;
+
 @property (nonatomic, strong) NSMutableArray *distanceRecords;
 
 

@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "BLEDevice.h"
 
+
+static NSString *BLEAdvertisingServiceUUIDPrefix = @"ABCDEF";
+
+
 /**
  * 蓝牙扫描模式
  **/
