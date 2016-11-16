@@ -14,6 +14,7 @@ class NBGraphicViewController: UIViewController {
     var refreshBarButtonItem: UIBarButtonItem!
     var showIdBarButtonItem: UIBarButtonItem!
     var loadingBarButtonItem: UIBarButtonItem!
+    var shakeBarButtonItem: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +33,12 @@ class NBGraphicViewController: UIViewController {
     
     func showLoading() {
         navigationItem.rightBarButtonItems = [loadingBarButtonItem]
+        navigationItem.leftBarButtonItems = []
     }
     
     func hideLoading() {
         navigationItem.rightBarButtonItems = [showIdBarButtonItem,refreshBarButtonItem]
+        navigationItem.leftBarButtonItems = [shakeBarButtonItem]
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -45,6 +48,7 @@ class NBGraphicViewController: UIViewController {
     func setupNavigationItems() {
         refreshBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(NBGraphicViewController.getServerData))
         showIdBarButtonItem = UIBarButtonItem(title: "显示ID", style: .plain, target: self, action: #selector(NBGraphicViewController.toggleId))
+        shakeBarButtonItem = UIBarButtonItem(title: "Shake", style: .plain, target: self, action: #selector(NBGraphicViewController.toggleShake))
         let loadingView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         loadingView.startAnimating()
         loadingBarButtonItem = UIBarButtonItem(customView: loadingView)
@@ -89,7 +93,11 @@ class NBGraphicViewController: UIViewController {
     }
     
     func toggleId() {
-        topoView.hideId = !topoView.hideId
+        topoView.showName = !topoView.showName
+    }
+    
+    func toggleShake() {
+        topoView.isShake = !topoView.isShake
     }
     
     func getServerData() {

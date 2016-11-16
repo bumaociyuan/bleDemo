@@ -67,5 +67,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NearBy/Bussiness/Graphic/NBGraphicViewController.swift"
+            timestampString = "500817026.209712"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "toggleId()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NearBy.NBGraphicViewController.toggleId () -&gt; ()"
+                  moduleName = "NearBy"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zx/study/bleDemo/NearBy/Bussiness/Graphic/NBGraphicViewController.swift"
+                  timestampString = "500804361.293054"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "17">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "@objc NearBy.NBGraphicViewController.toggleId () -&gt; ()"
+                  moduleName = "NearBy"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zx/study/bleDemo/NearBy/Bussiness/Graphic/NBGraphicViewController.swift"
+                  timestampString = "500804361.295431"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "92"
+                  endingLineNumber = "92"
+                  offsetFromSymbolStart = "31">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

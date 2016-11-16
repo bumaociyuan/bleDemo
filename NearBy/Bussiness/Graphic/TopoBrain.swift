@@ -10,7 +10,6 @@ import JavaScriptCore
 
 class TopoBrain: NSObject {
     
-	
 	func parse(point: [String: AnyObject]) -> CGPoint {
 		var result = CGPoint.zero
 		let x = point["x"]!
