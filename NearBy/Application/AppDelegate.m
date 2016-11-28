@@ -63,8 +63,11 @@
     if (!UUID) {
         CFUUIDRef uuid = CFUUIDCreate(NULL);
         UUID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
-        [[NSUserDefaults standardUserDefaults] setObject:UUID forKey:kApplicationUUIDKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+
+        if (UUID != nil) {
+            [[NSUserDefaults standardUserDefaults] setObject:UUID forKey:kApplicationUUIDKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
     
     return YES;
