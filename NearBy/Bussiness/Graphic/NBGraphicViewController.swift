@@ -96,7 +96,8 @@ class NBGraphicViewController: UIViewController {
         topoView.clearAllPoints()
         showLoading()
         let message = AIMessage()
-        message.url = "http://171.221.254.231:3003/data/getAllPoints"
+        //message.url = "http://171.221.254.231:3003/data/getAllPoints"
+        message.url = "http://localhost:3003/data/getAllPoints"
         AINetEngine.default().post(message, success: { [weak self] (response) -> Void in
             self?.hideLoading()
             let points = response as! [[String: AnyObject]]
@@ -105,7 +106,7 @@ class NBGraphicViewController: UIViewController {
             var result = [TopoPoint]()
             for p in points {
                 let point = brain.parse(point: p)
-//                print(point)
+                print(point)
                 result.append(TopoPoint(x: point.x, y: point.y, id: p["id"] as! String))
             }
             self?.topoView.points = result
